@@ -46,6 +46,16 @@ export const experience = [
   },
 ]
 
+export const education = {
+  school: 'Universitas Brawijaya',
+  faculty: 'Faculty of Computer Science (FILKOM)',
+  degree: 'Informatics Engineering (S.Kom)',
+  date: 'Jan 2020 - Dec 2025',
+  location: 'Malang, Indonesia',
+  summary:
+    'Built a foundation in Software Architecture, Web & Mobile Systems, and Algorithmic Problem Solving, culminating in published research on declarative UI performance.',
+  highlights: ['Software Architecture', 'Web & Mobile Systems', 'Algorithmic Problem Solving', 'Published Thesis Paper'],
+}
 export const thesis = {
   title:
     'Comparative Analysis of RecyclerView and LazyColumn Performance in Displaying Data Collection in Android Applications',

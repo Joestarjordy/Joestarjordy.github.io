@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
-import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2 } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap } from 'lucide-react'
 import Scene from './components/Scene'
 import { cn } from './lib/cn'
 import {
-  profile, skills, stats, projects, experience, thesis, categories, type Category,
+  profile, skills, stats, projects, experience, education, thesis, categories, type Category,
 } from './data/portfolio'
 
 const fadeUp: Variants = {
@@ -138,7 +138,7 @@ export default function App() {
           JCB<span className="text-acid">.</span>
         </a>
         <nav className="glass hidden gap-8 rounded-full px-6 py-2 font-mono text-xs md:flex">
-          {['about', 'experience', 'skills', 'work', 'contact'].map((s) => (
+          {['about', 'education', 'experience', 'skills', 'work', 'contact'].map((s) => (
             <a key={s} href={`#${s}`} className="uppercase tracking-widest transition-colors hover:text-acid">{s}</a>
           ))}
         </nav>
@@ -208,8 +208,29 @@ export default function App() {
           </Reveal>
         </section>
 
-        {/* EXPERIENCE + THESIS */}
-        <section id="experience" className="px-6 py-24 md:px-12">
+        {/* EDUCATION */}
+        <section id="education" className="px-6 py-24 md:px-12">
+          <Reveal>
+            <motion.p variants={fadeUp} className="font-mono text-sm text-ice">/ education</motion.p>
+            <motion.h2 variants={fadeUp} className="font-display mt-3 text-4xl font-bold md:text-5xl">Where it all started.</motion.h2>
+            <motion.div variants={fadeUp} className="glass relative mt-8 max-w-4xl overflow-hidden rounded-3xl p-8 md:p-10">
+              <GraduationCap aria-hidden size={160} className="pointer-events-none absolute -top-6 -right-6 text-acid/10" />
+              <div className="font-mono text-xs text-acid">{education.date}</div>
+              <h3 className="font-display mt-2 text-2xl font-bold md:text-3xl">{education.school}</h3>
+              <div className="mt-1 font-mono text-sm text-ice">{education.faculty}</div>
+              <div className="mt-1 text-bone/80">{education.degree}</div>
+              <p className="mt-4 max-w-2xl text-sm text-bone/70">{education.summary}</p>
+              <div className="mt-6 flex flex-wrap gap-2 font-mono text-xs">
+                {education.highlights.map((h) => (
+                  <span key={h} className="rounded-full border border-white/20 px-4 py-2 hover:border-acid hover:text-acid">{h}</span>
+                ))}
+              </div>
+              <div className="mt-6 flex items-center gap-1.5 font-mono text-xs text-bone/60"><MapPin size={13} /> {education.location}</div>
+            </motion.div>
+          </Reveal>
+        </section>
+
+        {/* EXPERIENCE + THESIS */}        <section id="experience" className="px-6 py-24 md:px-12">
           <Reveal className="grid gap-6 lg:grid-cols-2">
             <div>
               <motion.p variants={fadeUp} className="font-mono text-sm text-ice">/ experience</motion.p>
