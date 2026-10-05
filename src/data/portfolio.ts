@@ -7,8 +7,8 @@ export const profile = {
     'I design and build premium web applications, translating complex ideas into elegant, responsive, and high-performance digital experiences.',
   location: 'Malang, Indonesia',
   email: 'buana779@gmail.com',
-  photo: '/jordy.jpg',
-  resume: '/CV_Jordy_Cahya_Buana.pdf',
+  photo: import.meta.env.BASE_URL + 'jordy.jpg',
+  resume: import.meta.env.BASE_URL + 'CV_Jordy_Cahya_Buana.pdf',
   aboutTitle: 'Fusing Design with Technical Precision',
   about: [
     'I am a motivated Informatics Engineering graduate from Brawijaya University, specializing in Front-End Development. As a dedicated vibe coder, I thrive on bridging the gap between design and functionality — combining intuitive AI-assisted workflows and modern tech to build scalable, responsive web applications. My expertise spans the JavaScript ecosystem, including React, Next.js, and advanced CSS frameworks.',
@@ -53,7 +53,7 @@ export const thesis = {
   summary:
     'Empirical research measuring frame render latency, memory overhead, and scroll velocity comparing Jetpack Compose with traditional RecyclerView.',
   href: 'https://j-ptiik.ub.ac.id/index.php/j-ptiik/article/view/16234/7161',
-  cover: '/thesis_cover.jpg',
+  cover: import.meta.env.BASE_URL + 'thesis_cover.jpg',
 }
 
 export type Category = 'web' | 'mobile' | 'system'
