@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, type Variants } from 'framer-motion'
 
 const word = 'PORTFOLIO'
@@ -22,21 +22,24 @@ const ease = [0.76, 0, 0.24, 1] as const
 export default function Intro({ onEnter, onDone }: { onEnter: () => void; onDone: () => void }) {
   const [leaving, setLeaving] = useState(false)
   const started = useRef(false)
+  const timer = useRef<number>(0)
 
-  const go = () => {
+  const go = useCallback(() => {
     if (started.current) return
     started.current = true
     onEnter() // mount the page underneath while the intro still fully covers it
     setLeaving(true)
-    window.setTimeout(onDone, EXIT_MS)
-  }
+    timer.current = window.setTimeout(onDone, EXIT_MS)
+  }, [onEnter, onDone])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (!e.repeat) go() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [go])
+
+  // Clear the pending exit timer only when the intro itself unmounts.
+  useEffect(() => () => window.clearTimeout(timer.current), [])
 
   return (
     <div

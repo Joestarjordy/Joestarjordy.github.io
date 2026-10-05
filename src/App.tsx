@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, animate, motion, useInView, type Variants } from 'framer-motion'
-import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap, Smartphone, Globe, FlaskConical, Layers } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap, Menu, X, Smartphone, Globe, FlaskConical, Layers } from 'lucide-react'
 import Scene from './components/Scene'
 import { cn } from './lib/cn'
 import {
@@ -116,6 +116,8 @@ export default function App() {
   const scroll = useRef(0)
   const role = useTypewriter(profile.typewriter)
   const [filter, setFilter] = useState<'all' | Category>('all')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const navItems = ['about', 'education', 'experience', 'skills', 'work', 'contact']
   const shown = projects.filter((p) => filter === 'all' || p.category === filter)
 
   useEffect(() => {
@@ -152,13 +154,41 @@ export default function App() {
           JCB<span className="text-acid">.</span>
         </a>
         <nav className="glass hidden gap-8 rounded-full px-6 py-2 font-mono text-xs md:flex">
-          {['about', 'education', 'experience', 'skills', 'work', 'contact'].map((s) => (
+          {navItems.map((s) => (
             <a key={s} href={`#${s}`} className="uppercase tracking-widest transition-colors hover:text-acid">{s}</a>
           ))}
         </nav>
-        <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="rounded-full bg-acid px-4 py-2 font-mono text-xs font-medium text-black transition-transform hover:scale-105">
-          Resume
-        </a>
+        <div className="flex items-center gap-3">
+          <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="rounded-full bg-acid px-4 py-2 font-mono text-xs font-medium text-black transition-transform hover:scale-105">
+            Resume
+          </a>
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+            className="glass flex h-9 w-9 items-center justify-center rounded-full md:hidden"
+          >
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.nav
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2 }}
+              className="glass absolute top-full right-6 left-6 flex flex-col rounded-2xl bg-ink/90 p-3 font-mono text-sm md:hidden"
+            >
+              {navItems.map((s) => (
+                <a key={s} href={`#${s}`} onClick={() => setMenuOpen(false)} className="rounded-lg px-4 py-3 tracking-widest uppercase hover:bg-white/5 hover:text-acid">
+                  {s}
+                </a>
+              ))}
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </header>
 
       <main className="relative z-10">

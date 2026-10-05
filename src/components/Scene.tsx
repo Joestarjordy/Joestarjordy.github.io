@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, MeshDistortMaterial, Environment } from '@react-three/drei'
 import * as THREE from 'three'
@@ -7,7 +7,7 @@ type Props = { scroll: React.MutableRefObject<number> }
 
 function Particles({ count = 900 }: { count?: number }) {
   const ref = useRef<THREE.InstancedMesh>(null!)
-  const dummy = useRef(new THREE.Object3D())
+  const dummy = useMemo(() => new THREE.Object3D(), [])
   const data = useRef(
     Array.from({ length: count }, () => ({
       pos: new THREE.Vector3(
@@ -23,10 +23,10 @@ function Particles({ count = 900 }: { count?: number }) {
   useFrame(({ clock }) => {
     const t = clock.elapsedTime
     data.current.forEach((p, i) => {
-      dummy.current.position.set(p.pos.x, p.pos.y + Math.sin(t * p.speed + i) * 0.4, p.pos.z)
-      dummy.current.scale.setScalar(p.s)
-      dummy.current.updateMatrix()
-      ref.current.setMatrixAt(i, dummy.current.matrix)
+      dummy.position.set(p.pos.x, p.pos.y + Math.sin(t * p.speed + i) * 0.4, p.pos.z)
+      dummy.scale.setScalar(p.s)
+      dummy.updateMatrix()
+      ref.current.setMatrixAt(i, dummy.matrix)
     })
     ref.current.instanceMatrix.needsUpdate = true
   })
