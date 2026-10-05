@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
-import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap } from 'lucide-react'
+import { AnimatePresence, animate, motion, useInView, type Variants } from 'framer-motion'
+import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap, Smartphone, Globe, FlaskConical, Layers } from 'lucide-react'
 import Scene from './components/Scene'
 import { cn } from './lib/cn'
 import {
@@ -44,6 +44,20 @@ function useTypewriter(words: string[]) {
   }, [words])
   return text
 }
+
+function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true })
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    if (!inView) return
+    const c = animate(0, to, { duration: 1.6, ease: 'easeOut', onUpdate: (v) => setN(Math.round(v)) })
+    return () => c.stop()
+  }, [inView, to])
+  return <span ref={ref}>{n}{suffix}</span>
+}
+
+const focusIcons = { mobile: Smartphone, web: Globe, research: FlaskConical, systems: Layers }
 
 type Project = (typeof projects)[number]
 
@@ -212,11 +226,12 @@ export default function App() {
         <section id="education" className="px-6 py-24 md:px-12">
           <Reveal>
             <motion.p variants={fadeUp} className="font-mono text-sm text-ice">/ education</motion.p>
-            <motion.h2 variants={fadeUp} className="font-display mt-3 text-4xl font-bold md:text-5xl">Where it all started.</motion.h2>
-            <motion.div variants={fadeUp} className="glass relative mt-8 max-w-4xl overflow-hidden rounded-3xl p-8 md:p-10">
-              <GraduationCap aria-hidden size={160} className="pointer-events-none absolute -top-6 -right-6 text-acid/10" />
+            <motion.h2 variants={fadeUp} className="font-display mt-3 text-4xl font-bold md:text-6xl">Where it all started.</motion.h2>
+
+            <motion.div variants={fadeUp} className="glass relative mt-8 overflow-hidden rounded-3xl p-8 md:p-10">
+              <GraduationCap aria-hidden size={200} className="pointer-events-none absolute -top-8 -right-8 text-acid/10" />
               <div className="font-mono text-xs text-acid">{education.date}</div>
-              <h3 className="font-display mt-2 text-2xl font-bold md:text-3xl">{education.school}</h3>
+              <h3 className="font-display mt-2 text-2xl font-bold md:text-4xl">{education.school}</h3>
               <div className="mt-1 font-mono text-sm text-ice">{education.faculty}</div>
               <div className="mt-1 text-bone/80">{education.degree}</div>
               <p className="mt-4 max-w-2xl text-sm text-bone/70">{education.summary}</p>
@@ -225,11 +240,63 @@ export default function App() {
                   <span key={h} className="rounded-full border border-white/20 px-4 py-2 hover:border-acid hover:text-acid">{h}</span>
                 ))}
               </div>
+              <div className="mt-8 grid grid-cols-2 gap-6 border-t border-white/10 pt-6 md:grid-cols-4">
+                {[
+                  { to: 6, suffix: '', label: 'Years at FILKOM' },
+                  { to: projects.length, suffix: '+', label: 'Projects built' },
+                  { to: 1, suffix: '', label: 'Published paper' },
+                  { to: education.focus.length, suffix: '', label: 'Focus areas' },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <div className="font-display text-4xl font-extrabold text-acid"><CountUp to={s.to} suffix={s.suffix} /></div>
+                    <div className="font-mono text-[11px] text-bone/60">{s.label}</div>
+                  </div>
+                ))}
+              </div>
               <div className="mt-6 flex items-center gap-1.5 font-mono text-xs text-bone/60"><MapPin size={13} /> {education.location}</div>
             </motion.div>
           </Reveal>
-        </section>
 
+          <Reveal className="mt-16">
+            <motion.p variants={fadeUp} className="font-mono text-sm text-acid">/ the journey</motion.p>
+            <div className="relative mt-6 grid gap-6 md:grid-cols-4">
+              <div aria-hidden className="absolute top-4 right-0 left-0 hidden h-px bg-gradient-to-r from-acid via-ice to-transparent md:block" />
+              {education.milestones.map((m) => (
+                <motion.div key={m.year} variants={fadeUp} className="relative md:pt-10">
+                  <span className="absolute top-2.5 hidden h-3 w-3 rounded-full bg-acid shadow-[0_0_14px_var(--color-acid)] md:block" />
+                  <div className="font-display text-3xl font-extrabold"><span className="outline-text">{m.year}</span></div>
+                  <h4 className="font-display mt-1 text-lg font-bold">{m.title}</h4>
+                  <p className="mt-1 text-sm text-bone/70">{m.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal className="mt-16">
+            <motion.p variants={fadeUp} className="font-mono text-sm text-ice">/ what I focused on</motion.p>
+            <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+              {education.focus.map((f) => {
+                const Icon = focusIcons[f.icon as keyof typeof focusIcons]
+                return (
+                  <motion.div
+                    key={f.title}
+                    variants={fadeUp}
+                    whileHover={{ y: -8, rotateX: 4, rotateY: -4 }}
+                    style={{ transformPerspective: 800 }}
+                    className="glass group rounded-2xl p-6 transition-colors hover:border-acid"
+                  >
+                    <Icon size={28} className="text-acid transition-transform group-hover:scale-110" />
+                    <h4 className="font-display mt-4 text-lg font-bold">{f.title}</h4>
+                    <p className="mt-2 text-sm text-bone/70">{f.desc}</p>
+                    <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-[11px] text-ice">
+                      {f.tags.map((t) => <span key={t} className="rounded-full bg-white/5 px-2.5 py-1">{t}</span>)}
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </Reveal>
+        </section>
         {/* EXPERIENCE + THESIS */}        <section id="experience" className="px-6 py-24 md:px-12">
           <Reveal className="grid gap-6 lg:grid-cols-2">
             <div>

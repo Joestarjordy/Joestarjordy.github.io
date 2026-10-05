@@ -53,8 +53,20 @@ export const education = {
   date: 'Jan 2020 - Dec 2025',
   location: 'Malang, Indonesia',
   summary:
-    'Built a foundation in Software Architecture, Web & Mobile Systems, and Algorithmic Problem Solving, culminating in published research on declarative UI performance.',
+    'Six years at one of Indonesia\'s leading computer science faculties - building a foundation in Software Architecture, Web & Mobile Systems and Algorithmic Problem Solving, and finishing with published research on declarative UI performance.',
   highlights: ['Software Architecture', 'Web & Mobile Systems', 'Algorithmic Problem Solving', 'Published Thesis Paper'],
+  milestones: [
+    { year: '2020', title: 'Enrolled at FILKOM', desc: 'Began the Informatics Engineering programme at Universitas Brawijaya, Malang.' },
+    { year: '2023', title: 'Bangkit Academy', desc: 'Selected for the Google, GoTo & Traveloka programme - shipped native Android apps with Kotlin.' },
+    { year: '2024', title: 'Thesis research', desc: 'Benchmarked RecyclerView against Jetpack Compose LazyColumn - frame latency, memory and scroll velocity.' },
+    { year: '2025', title: 'Graduated - S.Kom', desc: 'Completed the degree and published the research in Jurnal PTIIK, Universitas Brawijaya.' },
+  ],
+  focus: [
+    { icon: 'mobile', title: 'Mobile Engineering', desc: 'Native Android from XML and RecyclerView to modern Jetpack Compose, with performance profiling.', tags: ['Kotlin', 'Android SDK', 'Jetpack Compose', 'Macrobenchmark'] },
+    { icon: 'web', title: 'Web Development', desc: 'Responsive front-ends, fluid micro-interactions and game-like experiences on the web.', tags: ['React', 'Next.js', 'TypeScript', 'CSS'] },
+    { icon: 'research', title: 'Research & Performance', desc: 'Empirical, data-driven comparison of UI toolkits - methodology, measurement and writing.', tags: ['Benchmarking', 'Profiling', 'Academic Writing'] },
+    { icon: 'systems', title: 'Systems & Architecture', desc: 'Software engineering coursework applied to full-stack projects with databases and clean structure.', tags: ['PHP', 'MySQL', 'Software Design'] },
+  ],
 }
 export const thesis = {
   title:
