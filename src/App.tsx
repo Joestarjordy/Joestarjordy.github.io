@@ -228,17 +228,17 @@ export default function App() {
               <img src={profile.photo} alt={profile.name} loading="lazy" className="aspect-[3/4] w-full rounded-2xl border border-white/15 object-cover" />
               <p className="mt-3 flex items-center gap-1.5 font-mono text-xs text-bone/60"><MapPin size={13} /> {profile.location}</p>
             </motion.div>
-            <div>
+            <div className="min-w-0">
               <motion.p variants={fadeUp} className="font-mono text-sm text-acid">/ about — {profile.role}</motion.p>
               <motion.h2 variants={fadeUp} className="font-display mt-3 text-3xl font-bold md:text-4xl">{profile.aboutTitle}</motion.h2>
               {profile.about.map((t) => (
                 <motion.p key={t} variants={fadeUp} className="mt-4 text-bone/75">{t}</motion.p>
               ))}
-              <motion.div variants={fadeUp} className="mt-6 grid grid-cols-3 gap-4 border-t border-white/10 pt-5">
+              <motion.div variants={fadeUp} className="mt-6 grid grid-cols-1 gap-4 border-t border-white/10 pt-5 sm:grid-cols-3">
                 {stats.map((s) => (
-                  <div key={s.label}>
-                    <div className="font-display text-3xl font-extrabold text-acid">{s.value}</div>
-                    <div className="font-mono text-[11px] text-bone/60">{s.label}</div>
+                  <div key={s.label} className="min-w-0">
+                    <div className="font-display text-2xl font-extrabold text-acid sm:text-3xl">{s.value}</div>
+                    <div className="font-mono text-[11px] leading-snug text-bone/60">{s.label}</div>
                   </div>
                 ))}
               </motion.div>
