@@ -63,7 +63,6 @@ type Project = (typeof projects)[number]
 
 function ProjectCard({ p }: { p: Project }) {
   const ref = useRef<HTMLDivElement>(null)
-  const [tilt, setTilt] = useState({ x: 0, y: 0 })
   return (
     <motion.div
       layout
@@ -75,12 +74,18 @@ function ProjectCard({ p }: { p: Project }) {
       <div
         ref={ref}
         onMouseMove={(e) => {
-          const r = ref.current!.getBoundingClientRect()
-          setTilt({ x: ((e.clientY - r.top) / r.height - 0.5) * -10, y: ((e.clientX - r.left) / r.width - 0.5) * 10 })
+          const el = ref.current
+          if (!el) return
+          const r = el.getBoundingClientRect()
+          const rx = ((e.clientY - r.top) / r.height - 0.5) * -10
+          const ry = ((e.clientX - r.left) / r.width - 0.5) * 10
+          el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`
         }}
-        onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-        style={{ transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`, transition: 'transform .15s ease-out' }}
-        className="glass group relative flex h-full flex-col overflow-hidden rounded-2xl p-6"
+        onMouseLeave={() => {
+          if (ref.current) ref.current.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)'
+        }}
+        style={{ transform: 'perspective(900px) rotateX(0deg) rotateY(0deg)', transition: 'transform .15s ease-out' }}
+        className="glass group relative flex h-full flex-col overflow-hidden rounded-2xl p-6 will-change-transform"
       >
         <div
           className="absolute -top-16 -right-16 h-44 w-44 rounded-full opacity-25 blur-3xl transition-opacity group-hover:opacity-60"

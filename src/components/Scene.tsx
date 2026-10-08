@@ -1,11 +1,11 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, MeshDistortMaterial, Environment } from '@react-three/drei'
+import { AdaptiveDpr, Float, MeshDistortMaterial, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 
 type Props = { scroll: React.MutableRefObject<number> }
 
-function Particles({ count = 900 }: { count?: number }) {
+function Particles({ count = 550 }: { count?: number }) {
   const ref = useRef<THREE.InstancedMesh>(null!)
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const data = useRef(
@@ -22,13 +22,16 @@ function Particles({ count = 900 }: { count?: number }) {
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime
-    data.current.forEach((p, i) => {
+    const arr = data.current
+    const mesh = ref.current
+    for (let i = 0; i < arr.length; i++) {
+      const p = arr[i]
       dummy.position.set(p.pos.x, p.pos.y + Math.sin(t * p.speed + i) * 0.4, p.pos.z)
       dummy.scale.setScalar(p.s)
       dummy.updateMatrix()
-      ref.current.setMatrixAt(i, dummy.matrix)
-    })
-    ref.current.instanceMatrix.needsUpdate = true
+      mesh.setMatrixAt(i, dummy.matrix)
+    }
+    mesh.instanceMatrix.needsUpdate = true
   })
 
   return (
@@ -43,16 +46,19 @@ function Hero() {
   const core = useRef<THREE.Mesh>(null!)
   const shell = useRef<THREE.Mesh>(null!)
   useFrame(({ clock, pointer }, dt) => {
+    const safeDt = Math.min(dt, 0.1)
     const t = clock.elapsedTime
-    core.current.rotation.x = t * 0.15 + pointer.y * 0.4
-    core.current.rotation.y = t * 0.2 + pointer.x * 0.6
-    shell.current.rotation.x -= dt * 0.1
-    shell.current.rotation.y += dt * 0.15
+    const targetX = t * 0.15 + pointer.y * 0.4
+    const targetY = t * 0.2 + pointer.x * 0.6
+    core.current.rotation.x = THREE.MathUtils.damp(core.current.rotation.x, targetX, 6, safeDt)
+    core.current.rotation.y = THREE.MathUtils.damp(core.current.rotation.y, targetY, 6, safeDt)
+    shell.current.rotation.x -= safeDt * 0.1
+    shell.current.rotation.y += safeDt * 0.15
   })
   return (
     <group position={[2.2, 0, 0]}>
       <mesh ref={core}>
-        <icosahedronGeometry args={[1.6, 24]} />
+        <icosahedronGeometry args={[1.6, 12]} />
         <MeshDistortMaterial color="#0c0f12" metalness={1} roughness={0.15} distort={0.35} speed={1.8} />
       </mesh>
       <mesh ref={shell}>
@@ -68,7 +74,7 @@ function Satellites() {
     <>
       <Float speed={2} rotationIntensity={1.5} floatIntensity={2}>
         <mesh position={[-4, -11, -2]}>
-          <torusKnotGeometry args={[1, 0.3, 160, 20]} />
+          <torusKnotGeometry args={[1, 0.3, 100, 16]} />
           <meshStandardMaterial color="#5ee7ff" metalness={0.9} roughness={0.2} />
         </mesh>
       </Float>
@@ -80,7 +86,7 @@ function Satellites() {
       </Float>
       <Float speed={2.5} rotationIntensity={1} floatIntensity={3}>
         <mesh position={[-4, -38, -2]}>
-          <torusGeometry args={[1.4, 0.45, 24, 64]} />
+          <torusGeometry args={[1.4, 0.45, 20, 48]} />
           <meshStandardMaterial color="#c6ff3d" metalness={0.9} roughness={0.2} />
         </mesh>
       </Float>
@@ -93,26 +99,35 @@ function Rig({ scroll }: Props) {
   useFrame(({ camera, pointer }, dt) => {
     const safeDt = Math.min(dt, 0.1)
     const targetY = -scroll.current * 42
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, targetY, 4, safeDt)
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, pointer.x * 0.6, 3, safeDt)
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, targetY, 5, safeDt)
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, pointer.x * 0.6, 4, safeDt)
     camera.lookAt(0, camera.position.y, 0)
   })
   return null
 }
 
 export default function Scene({ scroll }: Props) {
+  const [maxDpr, setMaxDpr] = useState(1.5)
+  useEffect(() => {
+    const isWin = /Win/i.test(navigator.userAgent)
+    setMaxDpr(Math.min(window.devicePixelRatio, isWin ? 1.5 : 2))
+  }, [])
+
   return (
-    <div className="fixed inset-0 z-0">
+    <div className="pointer-events-none fixed inset-0 z-0">
       <Canvas
-        dpr={[1, Math.min(window.devicePixelRatio, 2)]}
+        dpr={[1, maxDpr]}
         camera={{ position: [0, 0, 9], fov: 50 }}
-        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        gl={{ antialias: true, powerPreference: 'high-performance', stencil: false }}
+        eventSource={document.documentElement}
+        eventPrefix="client"
       >
+        <AdaptiveDpr pixelated={false} />
         <fog attach="fog" args={['#07080a', 10, 32]} />
         <ambientLight intensity={0.4} />
         <directionalLight position={[5, 6, 5]} intensity={2} color="#ffffff" />
         <pointLight position={[-6, 0, 4]} intensity={30} color="#5ee7ff" />
-        <Environment preset="night" />
+        <Environment preset="night" resolution={128} />
         <Hero />
         <Satellites />
         <Particles />
