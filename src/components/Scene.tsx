@@ -90,10 +90,11 @@ function Satellites() {
 
 // Camera travels down the world as the page scrolls.
 function Rig({ scroll }: Props) {
-  useFrame(({ camera, pointer }) => {
+  useFrame(({ camera, pointer }, dt) => {
+    const safeDt = Math.min(dt, 0.1)
     const targetY = -scroll.current * 42
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, targetY, 4, 0.016)
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, pointer.x * 0.6, 3, 0.016)
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, targetY, 4, safeDt)
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, pointer.x * 0.6, 3, safeDt)
     camera.lookAt(0, camera.position.y, 0)
   })
   return null

@@ -121,16 +121,73 @@ export default function App() {
   const shown = projects.filter((p) => filter === 'all' || p.category === filter)
 
   useEffect(() => {
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight
+    let max = 0
+    const updateMax = () => {
+      max = document.documentElement.scrollHeight - window.innerHeight
       scroll.current = max > 0 ? window.scrollY / max : 0
     }
-    onScroll()
+    const onScroll = () => {
+      scroll.current = max > 0 ? window.scrollY / max : 0
+    }
+    updateMax()
+
+    const ro = new ResizeObserver(updateMax)
+    ro.observe(document.documentElement)
     window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
+    window.addEventListener('resize', updateMax)
+
+    // Smooth inertial wheel scrolling for discrete mouse wheels (Windows),
+    // while leaving native Mac/Windows precision trackpads & reduced-motion untouched.
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let targetY = window.scrollY
+    let currentY = window.scrollY
+    let rafId = 0
+    let active = false
+
+    const tick = () => {
+      const diff = targetY - currentY
+      if (Math.abs(diff) < 0.5) {
+        currentY = targetY
+        window.scrollTo({ top: currentY, behavior: 'instant' })
+        active = false
+        return
+      }
+      currentY += diff * 0.14
+      window.scrollTo({ top: currentY, behavior: 'instant' })
+      rafId = window.requestAnimationFrame(tick)
+    }
+
+    const onWheel = (e: WheelEvent) => {
+      if (reducedMotion || e.ctrlKey) return
+      // Pixel-mode wheels with small fractional/frequent deltas are precision trackpads -> keep native inertia
+      const isTrackpad = e.deltaMode === 0 && Math.abs(e.deltaY) < 50 && !Number.isInteger(e.deltaY)
+      if (isTrackpad) {
+        targetY = window.scrollY
+        currentY = window.scrollY
+        return
+      }
+      e.preventDefault()
+      if (!active) {
+        targetY = window.scrollY
+        currentY = window.scrollY
+      }
+      const step = e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY
+      max = document.documentElement.scrollHeight - window.innerHeight
+      targetY = Math.max(0, Math.min(max, targetY + step))
+      if (!active) {
+        active = true
+        rafId = window.requestAnimationFrame(tick)
+      }
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: false })
+
     return () => {
+      ro.disconnect()
       window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
+      window.removeEventListener('resize', updateMax)
+      window.removeEventListener('wheel', onWheel)
+      window.cancelAnimationFrame(rafId)
     }
   }, [])
 
