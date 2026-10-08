@@ -5,14 +5,12 @@ import Intro from './components/Intro'
 import './index.css'
 
 function Root() {
-  const [entered, setEntered] = useState(false)
   const [introDone, setIntroDone] = useState(false)
-  const enter = useCallback(() => setEntered(true), [])
   const done = useCallback(() => setIntroDone(true), [])
   return (
     <>
-      {entered && <App />}
-      {!introDone && <Intro onEnter={enter} onDone={done} />}
+      <App />
+      {!introDone && <Intro onDone={done} />}
     </>
   )
 }
