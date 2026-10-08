@@ -88,8 +88,8 @@ function ProjectCard({ p }: { p: Project }) {
         className="glass group relative flex h-full flex-col overflow-hidden rounded-2xl p-6 will-change-transform"
       >
         <div
-          className="absolute -top-16 -right-16 h-44 w-44 rounded-full opacity-25 blur-3xl transition-opacity group-hover:opacity-60"
-          style={{ background: p.color }}
+          className="pointer-events-none absolute -top-20 -right-20 h-52 w-52 rounded-full opacity-35 transition-opacity group-hover:opacity-75"
+          style={{ background: `radial-gradient(circle, ${p.color} 0%, transparent 70%)` }}
         />
         <div className="flex items-center justify-between font-mono text-xs text-bone/50">
           <span>/{p.id} · {p.cat}</span>
@@ -215,7 +215,7 @@ export default function App() {
         <a href="#top" className="font-display text-lg font-extrabold tracking-tight">
           JCB<span className="text-acid">.</span>
         </a>
-        <nav className="glass hidden gap-8 rounded-full px-6 py-2 font-mono text-xs md:flex">
+        <nav className="glass-nav hidden gap-8 rounded-full px-6 py-2 font-mono text-xs md:flex">
           {navItems.map((s) => (
             <a key={s} href={`#${s}`} className="uppercase tracking-widest transition-colors hover:text-acid">{s}</a>
           ))}
@@ -229,7 +229,7 @@ export default function App() {
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
-            className="glass flex h-9 w-9 items-center justify-center rounded-full md:hidden"
+            className="glass-nav flex h-9 w-9 items-center justify-center rounded-full md:hidden"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -241,7 +241,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.2 }}
-              className="glass absolute top-full right-6 left-6 flex flex-col rounded-2xl bg-ink/90 p-3 font-mono text-sm md:hidden"
+              className="glass-nav absolute top-full right-6 left-6 flex flex-col rounded-2xl p-3 font-mono text-sm md:hidden"
             >
               {navItems.map((s) => (
                 <a key={s} href={`#${s}`} onClick={() => setMenuOpen(false)} className="rounded-lg px-4 py-3 tracking-widest uppercase hover:bg-white/5 hover:text-acid">
@@ -275,7 +275,7 @@ export default function App() {
         </section>
 
         {/* MARQUEE */}
-        <div className="overflow-hidden border-y border-white/10 bg-ink/60 py-4 backdrop-blur">
+        <div className="overflow-hidden border-y border-white/10 bg-ink/85 py-4">
           <div className="marquee flex w-max gap-10 font-display text-2xl font-bold whitespace-nowrap uppercase">
             {[...skills, ...skills, ...skills].map((s, i) => (
               <span key={i} className={i % 2 ? 'outline-text' : ''}>{s} <span className="text-acid">✦</span></span>

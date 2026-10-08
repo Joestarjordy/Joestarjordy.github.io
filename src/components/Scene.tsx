@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { AdaptiveDpr, Float, MeshDistortMaterial, Environment } from '@react-three/drei'
+import { AdaptiveDpr, Float, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 
 type Props = { scroll: React.MutableRefObject<number> }
 
-function Particles({ count = 550 }: { count?: number }) {
+function Particles({ count = 420 }: { count?: number }) {
   const ref = useRef<THREE.InstancedMesh>(null!)
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const data = useRef(
@@ -58,8 +58,8 @@ function Hero() {
   return (
     <group position={[2.2, 0, 0]}>
       <mesh ref={core}>
-        <icosahedronGeometry args={[1.6, 12]} />
-        <MeshDistortMaterial color="#0c0f12" metalness={1} roughness={0.15} distort={0.35} speed={1.8} />
+        <icosahedronGeometry args={[1.6, 10]} />
+        <MeshDistortMaterial color="#12161f" emissive="#070a0e" metalness={0.85} roughness={0.2} distort={0.35} speed={1.8} />
       </mesh>
       <mesh ref={shell}>
         <icosahedronGeometry args={[2.3, 1]} />
@@ -74,20 +74,20 @@ function Satellites() {
     <>
       <Float speed={2} rotationIntensity={1.5} floatIntensity={2}>
         <mesh position={[-4, -11, -2]}>
-          <torusKnotGeometry args={[1, 0.3, 100, 16]} />
-          <meshStandardMaterial color="#5ee7ff" metalness={0.9} roughness={0.2} />
+          <torusKnotGeometry args={[1, 0.3, 80, 14]} />
+          <meshStandardMaterial color="#5ee7ff" metalness={0.75} roughness={0.25} />
         </mesh>
       </Float>
       <Float speed={1.5} rotationIntensity={2} floatIntensity={2}>
         <mesh position={[4.5, -24, -3]}>
           <boxGeometry args={[2, 2, 2]} />
-          <meshStandardMaterial color="#ff6b9d" metalness={0.8} roughness={0.25} />
+          <meshStandardMaterial color="#ff6b9d" metalness={0.7} roughness={0.3} />
         </mesh>
       </Float>
       <Float speed={2.5} rotationIntensity={1} floatIntensity={3}>
         <mesh position={[-4, -38, -2]}>
-          <torusGeometry args={[1.4, 0.45, 20, 48]} />
-          <meshStandardMaterial color="#c6ff3d" metalness={0.9} roughness={0.2} />
+          <torusGeometry args={[1.4, 0.45, 18, 40]} />
+          <meshStandardMaterial color="#c6ff3d" metalness={0.75} roughness={0.25} />
         </mesh>
       </Float>
     </>
@@ -107,27 +107,22 @@ function Rig({ scroll }: Props) {
 }
 
 export default function Scene({ scroll }: Props) {
-  const [maxDpr, setMaxDpr] = useState(1.5)
-  useEffect(() => {
-    const isWin = /Win/i.test(navigator.userAgent)
-    setMaxDpr(Math.min(window.devicePixelRatio, isWin ? 1.5 : 2))
-  }, [])
-
   return (
     <div className="pointer-events-none fixed inset-0 z-0">
       <Canvas
-        dpr={[1, maxDpr]}
+        dpr={[1, 1.25]}
         camera={{ position: [0, 0, 9], fov: 50 }}
-        gl={{ antialias: true, powerPreference: 'high-performance', stencil: false }}
+        gl={{ antialias: true, powerPreference: 'high-performance', alpha: false, stencil: false }}
         eventSource={document.documentElement}
         eventPrefix="client"
       >
+        <color attach="background" args={['#07080a']} />
         <AdaptiveDpr pixelated={false} />
         <fog attach="fog" args={['#07080a', 10, 32]} />
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 6, 5]} intensity={2} color="#ffffff" />
-        <pointLight position={[-6, 0, 4]} intensity={30} color="#5ee7ff" />
-        <Environment preset="night" resolution={128} />
+        <hemisphereLight args={['#5ee7ff', '#07080a', 1.2]} />
+        <directionalLight position={[5, 6, 5]} intensity={2.6} color="#ffffff" />
+        <directionalLight position={[-6, -4, -3]} intensity={1.1} color="#c6ff3d" />
+        <pointLight position={[-6, 0, 4]} intensity={35} color="#5ee7ff" />
         <Hero />
         <Satellites />
         <Particles />
