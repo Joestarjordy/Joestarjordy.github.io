@@ -115,13 +115,13 @@ export default function Intro({ onDone }: { onDone: () => void }) {
         transition={leaving ? { duration: 0.55 } : { duration: 5, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      <div className="relative" style={isMobile ? undefined : { perspective: 800 }}>
+      <div className="relative px-4" style={isMobile ? undefined : { perspective: 800 }}>
         <motion.h1
           key={isMobile ? 'm' : 'd'}
           className={
             isMobile
-              ? 'font-display flex flex-col items-center text-[clamp(2rem,6.5vh,3.75rem)] leading-[0.95] font-extrabold tracking-tight'
-              : 'font-display flex text-[clamp(2.5rem,12vw,10rem)] leading-none font-extrabold tracking-tight'
+              ? 'font-display flex flex-col items-center text-[clamp(1.6rem,5.4dvh,3rem)] leading-[0.92] font-extrabold tracking-tight'
+              : 'font-display flex text-[clamp(2rem,8.8vw,8.5rem)] leading-none font-extrabold tracking-tight'
           }
           style={isMobile ? undefined : { transformStyle: 'preserve-3d' }}
           initial="hidden"
@@ -141,7 +141,7 @@ export default function Intro({ onDone }: { onDone: () => void }) {
         </motion.h1>
       </div>
       <motion.p
-        className="relative mt-6 font-mono text-xs text-white/60 md:mt-10 md:text-sm"
+        className="relative mt-4 font-mono text-xs text-white/60 md:mt-10 md:text-sm"
         initial={{ opacity: 0 }}
         animate={leaving ? { opacity: 0 } : { opacity: [0, 1, 0.3, 1] }}
         transition={leaving ? { duration: 0.2 } : { delay: 1.4, duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
