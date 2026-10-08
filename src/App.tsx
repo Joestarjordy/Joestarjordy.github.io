@@ -122,8 +122,25 @@ export default function App() {
   const role = useTypewriter(profile.typewriter)
   const [filter, setFilter] = useState<'all' | Category>('all')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [resumeOpen, setResumeOpen] = useState(false)
+  const resumeRef = useRef(false)
+  resumeRef.current = resumeOpen
   const navItems = ['about', 'education', 'experience', 'skills', 'work', 'contact']
   const shown = projects.filter((p) => filter === 'all' || p.category === filter)
+
+  useEffect(() => {
+    if (!resumeOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setResumeOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [resumeOpen])
 
   useEffect(() => {
     let max = 0
@@ -163,7 +180,7 @@ export default function App() {
     }
 
     const onWheel = (e: WheelEvent) => {
-      if (reducedMotion || e.ctrlKey) return
+      if (reducedMotion || e.ctrlKey || resumeRef.current) return
       // Pixel-mode wheels with small fractional/frequent deltas are precision trackpads -> keep native inertia
       const isTrackpad = e.deltaMode === 0 && Math.abs(e.deltaY) < 50 && !Number.isInteger(e.deltaY)
       if (isTrackpad) {
@@ -221,9 +238,13 @@ export default function App() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="rounded-full bg-acid px-4 py-2 font-mono text-xs font-medium text-black transition-transform hover:scale-105">
+          <button
+            type="button"
+            onClick={() => setResumeOpen(true)}
+            className="cursor-pointer rounded-full bg-acid px-4 py-2 font-mono text-xs font-medium text-black transition-transform hover:scale-105"
+          >
             Resume
-          </a>
+          </button>
           <button
             type="button"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -305,7 +326,13 @@ export default function App() {
                 ))}
               </motion.div>
               <motion.div variants={fadeUp} className="mt-6 flex flex-wrap gap-3 font-mono text-xs">
-                <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-acid px-4 py-2 text-black"><Download size={14} /> My Resume</a>
+                <button
+                  type="button"
+                  onClick={() => setResumeOpen(true)}
+                  className="flex cursor-pointer items-center gap-2 rounded-full bg-acid px-4 py-2 text-black transition-transform hover:scale-105"
+                >
+                  <Download size={14} /> My Resume
+                </button>
                 {profile.socials.map((s) => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/20 px-4 py-2 hover:border-acid hover:text-acid">{s.label} ↗</a>
                 ))}
@@ -508,6 +535,63 @@ export default function App() {
           <footer className="mt-24 font-mono text-xs text-bone/40">© {new Date().getFullYear()} {profile.name}. All Rights Reserved.</footer>
         </section>
       </main>
+
+      {/* RESUME POPUP MODAL */}
+      <AnimatePresence>
+        {resumeOpen && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Resume preview"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setResumeOpen(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 md:p-8"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 16 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="glass flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/15 bg-panel shadow-2xl"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 md:px-6">
+                <div className="flex items-center gap-2.5 font-mono text-xs md:text-sm">
+                  <span className="h-2.5 w-2.5 rounded-full bg-acid" />
+                  <span className="truncate text-bone">CV_Jordy_Cahya_Buana.pdf</span>
+                </div>
+                <div className="flex items-center gap-2 font-mono text-xs">
+                  <a
+                    href={profile.resume}
+                    download="CV_Jordy_Cahya_Buana.pdf"
+                    className="flex items-center gap-1.5 rounded-full bg-acid px-3.5 py-1.5 font-medium text-black transition-transform hover:scale-105"
+                  >
+                    <Download size={14} /> Download
+                  </a>
+                  <button
+                    type="button"
+                    aria-label="Close resume popup"
+                    onClick={() => setResumeOpen(false)}
+                    className="flex cursor-pointer items-center gap-1.5 rounded-full border border-white/20 px-3.5 py-1.5 text-bone transition-colors hover:border-acid hover:text-acid"
+                  >
+                    <X size={14} /> Close
+                  </button>
+                </div>
+              </div>
+              <div className="relative flex-1 bg-[#14171d]">
+                <iframe
+                  src={`${profile.resume}#view=FitH`}
+                  title={`${profile.name} Resume`}
+                  className="h-full w-full border-0"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
