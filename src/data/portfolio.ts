@@ -65,7 +65,7 @@ export const education = {
     { icon: 'mobile', title: 'Mobile Engineering', desc: 'Native Android from XML and RecyclerView to modern Jetpack Compose, with performance profiling.', tags: ['Kotlin', 'Android SDK', 'Jetpack Compose', 'Macrobenchmark'] },
     { icon: 'web', title: 'Web Development', desc: 'Responsive front-ends, fluid micro-interactions and game-like experiences on the web.', tags: ['React', 'Next.js', 'TypeScript', 'CSS'] },
     { icon: 'research', title: 'Research & Performance', desc: 'Empirical, data-driven comparison of UI toolkits - methodology, measurement and writing.', tags: ['Benchmarking', 'Profiling', 'Academic Writing'] },
-    { icon: 'systems', title: 'Systems & Architecture', desc: 'Software engineering coursework applied to full-stack projects with databases and clean structure.', tags: ['PHP', 'MySQL', 'Software Design'] },
+    { icon: 'support', title: 'IT & Tech Support', desc: 'Hardware troubleshooting, OS & system maintenance, network fundamentals, and user technical support.', tags: ['Troubleshooting', 'Windows / Android', 'Hardware & Network', 'IT Support'] },
   ],
 }
 export const thesis = {
