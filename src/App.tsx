@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, animate, motion, useInView, type Variants } from 'framer-motion'
-import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap, Menu, X, Smartphone, Globe, FlaskConical, Layers, Wrench } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap, Menu, X, Smartphone, Globe, FlaskConical, Layers, Wrench, Play } from 'lucide-react'
 import Scene from './components/Scene'
 import { cn } from './lib/cn'
 import {
@@ -102,13 +102,23 @@ function ProjectCard({ p }: { p: Project }) {
             <span key={t} className="rounded-full border border-white/15 px-3 py-1 font-mono text-[11px]">{t}</span>
           ))}
         </div>
-        <div className="mt-5 flex gap-4 border-t border-white/10 pt-4 font-mono text-xs">
-          <a href={p.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-acid">
+        <div className="mt-5 flex items-center gap-4 border-t border-white/10 pt-4 font-mono text-xs">
+          <a href={p.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 transition-colors hover:text-acid">
             <Code2 size={14} /> GitHub
           </a>
           {p.live && (
-            <a href={p.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-acid">
-              <ExternalLink size={14} /> Live
+            <a
+              href={p.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                'flex items-center gap-1.5 transition-colors hover:text-acid',
+                p.liveLabel === 'Play' &&
+                  'rounded-full border border-acid/40 bg-acid/15 px-3 py-1 font-semibold text-acid transition-all hover:scale-105 hover:border-acid hover:bg-acid hover:text-black'
+              )}
+            >
+              {p.liveLabel === 'Play' ? <Play size={12} className="fill-current" /> : <ExternalLink size={14} />}
+              {p.liveLabel || 'Live'}
             </a>
           )}
         </div>

@@ -89,7 +89,7 @@ export const categories: { id: 'all' | Category; label: string }[] = [
 const gh = (r: string) => `https://github.com/Joestarjordy/${r}`
 export const projects: {
   id: string; title: string; cat: string; category: Category; desc: string
-  tags: string[]; color: string; github: string; live?: string
+  tags: string[]; color: string; github: string; live?: string; liveLabel?: string
 }[] = [
   {
     id: '01', title: 'Pixel Rush', cat: 'Arcade Web Game', category: 'web', color: '#ff6b9d',
@@ -140,6 +140,8 @@ export const projects: {
   {
     id: '10', title: 'Wordbound: Pixel RPG', cat: 'Pixel RPG Game', category: 'web', color: '#ffd166',
     desc: 'A web-based pixel-art auto-runner RPG integrated with Wordle vocabulary combat mechanics, featuring stage progression, turn-based battles, sound engine, and player codex.',
-    tags: ['React', 'TypeScript', 'Pixel Art', 'Web Audio'], github: gh('Wordbound-Pixel_RPG'),
+    tags: ['React', 'TypeScript', 'Pixel Art', 'Web Audio'], github: gh('Wordbound'),
+    live: 'https://joestarjordy.github.io/Wordbound/',
+    liveLabel: 'Play',
   },
 ]
