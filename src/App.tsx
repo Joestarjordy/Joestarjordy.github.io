@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, animate, motion, useInView, type Variants } from 'framer-motion'
-import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap, Menu, X, Smartphone, Globe, FlaskConical, Layers, Wrench, Play } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Download, ExternalLink, Mail, MapPin, Code2, GraduationCap, Menu, X, Smartphone, Globe, FlaskConical, Layers, Wrench, Play, Bot } from 'lucide-react'
 import Scene from './components/Scene'
 import { cn } from './lib/cn'
 import {
@@ -57,7 +57,7 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{n}{suffix}</span>
 }
 
-const focusIcons = { mobile: Smartphone, web: Globe, research: FlaskConical, support: Wrench, systems: Wrench }
+const focusIcons = { mobile: Smartphone, web: Globe, ai: Bot, research: FlaskConical, support: Wrench, systems: Wrench }
 
 type Project = (typeof projects)[number]
 

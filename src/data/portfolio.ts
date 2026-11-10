@@ -23,6 +23,7 @@ export const profile = {
 export const skills = [
   'HTML5 / CSS3', 'Modern ES6+ JS', 'TypeScript', 'React.js', 'Next.js', 'Kotlin',
   'Android SDK', 'Jetpack Compose', 'PostgreSQL / MySQL', 'MongoDB / Redis', 'Docker / Git',
+  'AI Coding Agents', 'Claude Code / Gemini / Cursor',
 ]
 
 export const stats = [
@@ -64,7 +65,7 @@ export const education = {
   focus: [
     { icon: 'mobile', title: 'Mobile Engineering', desc: 'Native Android from XML and RecyclerView to modern Jetpack Compose, with performance profiling.', tags: ['Kotlin', 'Android SDK', 'Jetpack Compose', 'Macrobenchmark'] },
     { icon: 'web', title: 'Web Development', desc: 'Responsive front-ends, fluid micro-interactions and game-like experiences on the web.', tags: ['React', 'Next.js', 'TypeScript', 'CSS'] },
-    { icon: 'research', title: 'Research & Performance', desc: 'Empirical, data-driven comparison of UI toolkits - methodology, measurement and writing.', tags: ['Benchmarking', 'Profiling', 'Academic Writing'] },
+    { icon: 'ai', title: 'AI-Assisted Software Engineering', desc: 'Leveraging agentic workflows and LLM tooling to accelerate full-stack engineering, rapid prototyping, and automated code refactoring.', tags: ['AI Coding Agents', 'Claude Code / Gemini / Cursor', 'Agentic Workflows', 'Vibe Coding'] },
     { icon: 'support', title: 'IT & Tech Support', desc: 'Hardware troubleshooting, OS & system maintenance, network fundamentals, and user technical support.', tags: ['Troubleshooting', 'Windows / Android', 'Hardware & Network', 'IT Support'] },
   ],
 }
