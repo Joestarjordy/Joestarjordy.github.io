@@ -137,4 +137,9 @@ export const projects: {
     desc: 'Collaborative software-engineering class application validating design cycles, system patterns, and relational databases.',
     tags: ['PHP', 'MySQL', 'Hack'], github: gh('Projek-RPL'),
   },
+  {
+    id: '10', title: 'Wordbound: Pixel RPG', cat: 'Pixel RPG Game', category: 'web', color: '#ffd166',
+    desc: 'A web-based pixel-art auto-runner RPG integrated with Wordle vocabulary combat mechanics, featuring stage progression, turn-based battles, sound engine, and player codex.',
+    tags: ['React', 'TypeScript', 'Pixel Art', 'Web Audio'], github: gh('Wordbound-Pixel_RPG'),
+  },
 ]
