@@ -247,7 +247,16 @@ export default function App() {
             <a key={s} href={`#${s}`} className="uppercase tracking-widest transition-colors hover:text-acid">{s}</a>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <a
+            href="https://joestarjordy.github.io/Wordbound/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 rounded-full border border-acid/40 bg-acid/15 px-3 py-2 font-mono text-xs font-semibold text-acid transition-all hover:scale-105 hover:border-acid hover:bg-acid hover:text-black"
+          >
+            <Play size={11} className="fill-current" />
+            <span>Play<span className="hidden sm:inline"> Wordbound</span></span>
+          </a>
           <button
             type="button"
             onClick={() => setResumeOpen(true)}
